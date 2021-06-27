@@ -1,0 +1,31 @@
+version: "2.3"
+services:
+  ${JUPYTER_NAME}:
+    build:
+      context: "${JUPYTER_HOME}/image"
+      dockerfile: Dockerfile
+      args:
+        locale: "${LOCALE}"
+        pyenv_pyver: "${PYENV_PYVER}"
+        username: "${SKP_USER}"
+        userid: "${SKP_USERID}"
+        gpu: "${JUPYTER_GPU}"
+    runtime: "${JUPYTER_RUNTIME}"
+    image: "${JUPYTER_IMAGE}"
+    ports: # HOST:CONTAINER
+      - "${JUPYTER_PORT}:${JUPYTER_PORT}"
+    volumes: # HOST:CONTAINER
+      - "${JUPYTER_HOME}/volume/jupyter:/home/${SKP_USER}/jupyter"
+      - "${JUPYTER_ROOTDIR}:/home/${SKP_USER}/notebooks"
+    command: "/home/${SKP_USER}/jupyter/bin/run_jupyter.sh"
+    environment:
+      - "NVIDIA_VISIBLE_DEVICES=all"
+      - "NVIDIA_DRIVER_CAPABILITIES=all"
+      - "SKP_USER=${SKP_USER}"
+      - "PYENV_PYVER=${PYENV_PYVER}" 
+      - "PYENV_VERSION=${PYENV_PYVER}"         
+      - "JUPYTER_PORT=${JUPYTER_PORT}"          
+      - "JUPYTER_BASEURL=${JUPYTER_BASEURL}"          
+      - "JUPYTER_ROOTDIR=${JUPYTER_ROOTDIR}"         
+      - "JUPYTER_PASSWD=${JUPYTER_PASSWD}"
+      

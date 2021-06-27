@@ -1,0 +1,38 @@
+# BASE (주의: 환경 변수의 기준 값으로 변수 값 내에 다른 환경 변수를 참조하면 안됨)
+export SKP_USER="skp"
+export SKP_USERID=$(id -u $SKP_USER)
+export SKP_USER_HOME="/home/skp"
+export SKP_HOME="/home/skp/skp"
+
+# LOCALE
+export LOCALE="ko_KR.UTF-8" # or "en_US.UTF-8" 
+
+# PYTHON
+export PYENV_PYVER="3.8.9"
+export PYENV_VENV="skp-d4r-jupyter"
+export PATH="$HOME/.pyenv/bin:${PATH}"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+pyenv activate ${PYENV_VENV} 
+
+# NODEJS - N
+export N_PREFIX="${SKP_USER_HOME}/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
+
+# JUPYTER
+export JUPYTER_HOME="${SKP_HOME}/skp_d4r_jupyter"
+export JUPYTER_NAME="skp-d4r-jupyter"
+export JUPYTER_RUNTIME="" # "" (cpu) or "nvidia" (gpu)
+export JUPYTER_IMAGE="skp-d4r-jupyter:latest" # skp-jupyter-sts:latest or skp-jupyter-sts-gpu:latest
+export JUPYTER_PORT="52020" # Your Jupyter Port
+export JUPYTER_GPU="FALSE" # TRUE or FALSE
+export JUPYTER_BASEURL="jupyter" # Your Jupyter BaseURL, ex) http://localhost:8888/jupyter
+export JUPYTER_ROOTDIR="${SKP_HOME}/skp_d4r_jupyter_data" # container 안의 notebook dir 에 마운트될 위치
+# # HTTPS 적용은 Traefik 에서 진행되므로 자체 SSL 적용은 사용하지 않음
+# export JUPYTER_DNS="${LETSENCRYPT_DNS}"
+# export JUPYTER_CERT="${LETSENCRYPT_HOME}/var/${JUPYTER_DNS}/cert.pem"
+# export JUPYTER_CERT_KEY="${LETSENCRYPT_HOME}/var/${JUPYTER_DNS}/privkey.pem"
+
+# SECRET
+. ./.secret
